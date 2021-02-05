@@ -9,8 +9,8 @@ Create a virtual env from requirements.txt.
 Kafka and Postgres should be started. Kafka topic should be created.
 The tool uses 'checks' topic by default, but that can be changed via command
 line arguments. The consumer uses table 'site_checks' by default, can be
-changed via command line arguments. If the table does not exists, it is
-created by the producer automatically.
+changed via command line arguments. If the table does not exist, it is
+created by the consumer automatically.
 
 The checker accepts list of urls from stdin. Each line should contain a single
 URI to check.
