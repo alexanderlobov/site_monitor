@@ -1,0 +1,47 @@
+This is site_monitor, a tool that checks web sites and provides a Kafka
+producer and a Kafka consumer to write the data to the PostgreSQL.
+
+How to run the tool
+===================
+
+Create a virtual env from requirements.txt.
+
+Kafka and Postgres should be started. Kafka topic should be created.
+The tool uses 'checks' topic by default, but that can be changed via command
+line arguments. The consumer uses table 'site_checks' by default, can be
+changed via command line arguments. If the table does not exists, it is
+created by the producer automatically.
+
+The checker accepts list of urls from stdin. Each line should contain a single
+URI to check.
+
+Examples of running the producer:
+
+    cat urls-1000.txt | python -m site_monitor.run_checker --kafka-bootstrap-server <value> --log-level info --check-interval-seconds 10
+
+and consumer
+
+    python -m site_monitor.postgres_connector --kafka-bootstrap-server <value> --db-connection-string <value> --log-level info
+
+See also the help message from the commands
+
+    python -m site_monitor.run_checker -h
+    python -m site_monitor.postgres_connector -h
+
+How to run tests
+================
+
+From the project root:
+
+    pytest test/
+
+To run integration tests, one should declare the environment variables:
+
+    export KAFKA_BOOTSTRAP_SERVER=<url of your kafka server>
+    export DB_CONNECTION_STRING=<db conn string>
+
+Files ca.pem, service.cert, service.key required for Kafka connection should
+be copied to the project root. If you run site_monitor.run_checker or
+site_monitor.postgres_connector, you can pass the path to a directory with
+these files in  '--cert-path' parameter. But passing the parameter is not
+supported in the tests yet.
