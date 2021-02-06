@@ -2,3 +2,7 @@ ca.pem
 service.cert
 service.key
 *.log
+dist
+build
+__pycache__
+site_monitor.egg-info
