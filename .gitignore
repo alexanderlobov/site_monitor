@@ -6,3 +6,5 @@ dist
 build
 __pycache__
 site_monitor.egg-info
+cscope*
+tags

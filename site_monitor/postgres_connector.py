@@ -38,15 +38,25 @@ def consume_all(args):
     # default iterator interface can have issues. Details:
     # see https://blog.datasyndrome.com/a-tale-of-two-kafka-clients-c613efab49df
 
+    def make_record(msg):
+        rec = json.loads(msg.value.decode())
+        rec['consumer_name'] = args.name
+        rec['partition'] = msg.partition
+        return rec
+
     try:
         while True:
-            log.info('consume')
+            log.debug('consume')
             raw_msgs = consumer.poll(timeout_ms=100000, max_records=10000)
+
+            log.debug("received: %s", raw_msgs)
+
             msgs = (
-                json.loads(msg.value.decode())
+                make_record(msg)
                 for partition, msgs in raw_msgs.items()
                 for msg in msgs
             )
+
             execute_values(
                 db_cursor,
                 f"INSERT INTO {args.db_table_name} VALUES %s;",
@@ -59,6 +69,7 @@ def consume_all(args):
         db_cursor.close()
         db_conn.close()
 
+
 def parse_command_line_args():
     parser = argparse.ArgumentParser(
         description="Consumes data from Kafka and writes them to postgres")
@@ -70,6 +81,7 @@ def parse_command_line_args():
         default="url-checks-to-postgres")
     parser.add_argument("--db-connection-string", required=True)
     parser.add_argument("--db-table-name", default="site_checks")
+    parser.add_argument("--name", default="consumer")
 
     return parser.parse_args()
 

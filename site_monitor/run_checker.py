@@ -30,7 +30,8 @@ def run_checker(args):
     )
 
     def send(check_result):
-        log.info("%s", check_result)
+        check_result["checker_name"] = args.name
+        log.debug("%s", check_result)
         producer.send(
             args.kafka_topic,
             key=check_result['url'].encode(),
@@ -38,6 +39,7 @@ def run_checker(args):
         )
 
     urls = read_urls()
+    log.info("loaded %s urls", len(urls))
     asyncio.run(check_urls(send, urls, args.check_interval_seconds,
                            args.check_regexp, config.TIMEOUT))
 
@@ -49,6 +51,7 @@ def parse_command_line_args():
     config.add_common_cmd_args(parser)
     parser.add_argument("--check-interval-seconds", type=float, default=60)
     parser.add_argument("--check-regexp")
+    parser.add_argument("--name", default="checker")
 
     return parser.parse_args()
 

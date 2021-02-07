@@ -12,7 +12,8 @@ def make_check_result(
         status=None,
         error_msg=None,
         response_time=None,
-        regexp_found=None):
+        regexp_found=None,
+        checker_name=None):
     return locals()
 
 def create_scheme_request(table_name):
@@ -23,7 +24,10 @@ def create_scheme_request(table_name):
         error_msg text,
         response_time real,
         request_timestamp double precision,
-        regexp_found boolean
+        regexp_found boolean,
+        checker_name text,
+        consumer_name text,
+        partition int
     )
     '''
 
@@ -33,5 +37,8 @@ EXECUTE_TEMPLATE=(
     "%(error_msg)s, "
     "%(response_time)s, "
     "%(request_timestamp)s, "
-    "%(regexp_found)s)"
+    "%(regexp_found)s, "
+    "%(checker_name)s,"
+    "%(consumer_name)s,"
+    "%(partition)s)"
 )

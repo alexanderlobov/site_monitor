@@ -16,7 +16,7 @@ async def check_urls(on_check, urls, check_interval_seconds, check_regexp,
     async with aiohttp.ClientSession(timeout=timeout) as session:
         check_time = time.perf_counter()
         while True:
-            log.info('check_urls')
+            log.debug('check_urls')
             for url in urls:
                 asyncio.create_task(_check_url(
                     url, session, on_check, timeout, check_regexp_obj))
@@ -25,7 +25,7 @@ async def check_urls(on_check, urls, check_interval_seconds, check_regexp,
 
 
 async def _check_url(url, session, on_check, timeout, check_regexp):
-    log.info('check %s', url)
+    log.debug('check %s', url)
     time_start = time.perf_counter()
     request_timestamp = time.time()
     try:
