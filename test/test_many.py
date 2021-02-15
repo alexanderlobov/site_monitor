@@ -35,7 +35,7 @@ def producer_name(index):
 def consumer_name(index):
     return "consumer" + str(index)
 
-# for this test the kafka topic should contains at least 3 partitions 
+# for this test the kafka topic should contain at least 3 partitions
 
 @pytest.mark.asyncio
 async def test_many():

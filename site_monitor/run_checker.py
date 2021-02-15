@@ -46,7 +46,7 @@ def run_checker(args):
 
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description=
-        "Monitor websites availability and produces the metrics to Kafka")
+        "Monitors websites availability and produces the metrics to Kafka")
 
     config.add_common_cmd_args(parser)
     parser.add_argument("--check-interval-seconds", type=float, default=60)
